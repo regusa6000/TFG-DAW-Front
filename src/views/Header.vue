@@ -7,8 +7,8 @@
       </div>
       <div class="flex-1 p-5 flex items-center justify-center sm:items-stretch sm:justify-start">
         <div class="flex-shrink-0 flex items-center">
-          <img v-if="!logo" class="block lg:hidden h-10 w-auto" src="../images/logo.png" >
-          <img v-if="!logo" class="hidden lg:block h-10 w-auto" src="../images/logo.png" >
+          <img v-if="!logo" class="block lg:hidden h-10 w-auto" src="../images/logo.jpg" >
+          <img v-if="!logo" class="hidden lg:block h-10 w-auto" src="../images/logo.jpg" >
         </div>
         <div class="hidden sm:block sm:ml-6">
           <router-link to="/tareas">

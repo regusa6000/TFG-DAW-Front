@@ -1,8 +1,8 @@
 <template>
     
-    <div class="w-full flex flex-wrap mt-24 items-center">
+    <div class="w-full flex flex-col mt-24 lg:items-center lg:flex-row">
         <!-- Register Section -->
-        <div class="w-full md:w-1/2 flex flex-col m-auto">
+        <div class="w-2/1 flex flex-col m-auto">
 
             <div class="flex bg-white p-14 flex-col justify-center md:justify-start my-auto pt-8 md:pt-0 px-8 md:px-24 lg:px-32 ">
                 <div class="mt-9 rounded-md">
@@ -13,35 +13,44 @@
                 <form class="flex flex-col pt-1 md:pt-8" onsubmit="event.preventDefault();">
                     <div class="flex flex-col pt-4">
                         <input v-model="name" type="text" id="name" placeholder="Nombre" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                        <small class="mt-5" style="color:red;" v-if="errorName">Este campo es obligatorio, debe llenarlo.</small>
                     </div>
 
                     <div class="flex flex-col pt-4">
                         <input v-model="apellidos" type="text" id="apellido" placeholder="Apellidos" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                        <small class="mt-5" style="color:red;" v-if="errorApellidos">Este campo es obligatorio, debe llenarlo.</small>
                     </div>
 
                     <div class="flex flex-col pt-4">
                         <input v-model="email" type="email" id="email" placeholder="your@email.com" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                        <small class="mt-5" style="color:red;" v-if="errorEmail">Este campo es obligatorio, debe llenarlo.</small>
+                        <small class="mt-5" style="color:red;" v-if="verify">Este cuenta ya esta registrado, registrece con otra cuenta.</small>
                     </div>
 
                     <div class="flex flex-col pt-4">
                         <input v-model="telefono" type="number" id="telefono" placeholder="Telefono" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                        <small class="mt-5" style="color:red;" v-if="errorTelefono">Este campo es obligatorio, debe llenarlo.</small>
                     </div>
     
                     <div class="flex flex-col pt-4">
                         <input v-model="password" type="password" id="password" placeholder="Contraseña" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                        <small class="mt-5" style="color:red;" v-if="errorPassword">Este campo es obligatorio, debe llenarlo.</small>
                     </div>
     
                     <!-- <input type="submit" value="Registrarse" class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8" v-on:click="registro()"/> -->
-                    <button class="bg-black text-white font-bold uppercase text-sm px-6 p-4 mt-6 rounded shadow hover:bg-gray-700 outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="toggleModal();">
+                    <button class="bg-black text-white font-bold uppercase text-sm px-6 p-4 mt-6 rounded shadow hover:bg-gray-700 outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="registro()">
                         Registrar
+                    </button>
+                    <button class="bg-black text-white font-bold uppercase text-sm px-6 p-4 mt-6 rounded shadow hover:bg-gray-700 outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="cancelar()">
+                        Cancelar
                     </button>
                 </form>
             </div>
 
         </div>
 
-        <div>
-            <img class="w-2/3 rounded-md" src="../images/imagenRegister.jpg" alt="">
+        <div class="w-2/3 mt-10 m-auto md:w-1/3">
+            <img class=" rounded-md" src="../images/imagenRegister.jpg" alt="">
         </div> 
     
         <div>
@@ -90,6 +99,7 @@
 
     // import { mapActions, mapGetters } from 'vuex';
     import {register} from '../services/login'
+    import {verifyEmail} from '../services/login'
 
 export default {
     name: "regular-modal",
@@ -101,14 +111,54 @@ export default {
             telefono: this.value,
             password: this.value,
             rol:"usuario",
-            showModal: false
+            showModal: false,
+            errorName: false,
+            errorApellidos: false,
+            errorEmail:false,
+            errorTelefono: false,
+            errorPassword: false,
+            verify: false
     };
   },
   methods: {
     // ...mapActions(['saveUser']),
     registro: function () {
+        if(this.name == null){
+            this.errorName = true
+        }else{
+            this.errorName = false
+            if(this.apellidos == null){
+                this.errorApellidos = true
+            }else{
+                this.errorApellidos = false
+                if(this.email == null){
+                    this.errorEmail = true
+                }else{
+                    this.errorEmail = false
+                    if(this.telefono == null){
+                        this.errorTelefono = true
+                    }else{
+                        this.errorTelefono = false
+                        if(this.password == null){
+                            this.errorPassword = true
+                        }else{
+                            this.errorPassword = false
+                            verifyEmail(this.email).then((response)=>{
+                                if(response.data.email == this.email){
+                                    this.verify = true
+                                    
+                                }else{
+                                    this.verify = false
+                                    this.toggleModal()
+                                }
+                                
+                            })
+                        }
+                    }
+                }
+            }
+        }
       register(this.name,this.apellidos,this.email,this.password,this.telefono,this.rol).then((response)=>{
-        // this.saveUser(response.data)
         console.log(response)
         /*Esto sirve para redireccionar a otra pagina, name es la ruta a la cual apuntamos*/
         this.$router.push({name:"Home"})
@@ -116,6 +166,9 @@ export default {
     },
     toggleModal: function(){
       this.showModal = !this.showModal;
+    },
+    cancelar:function(){
+        this.$router.push({name:"Home"})
     }
   },
   computed: {

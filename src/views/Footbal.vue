@@ -1,7 +1,7 @@
 <template>
     <div class="w-5/6 m-auto bg-gray">
 
-        <h1 class="bg-white p-8">La Liga</h1>
+        <h1 class="bg-white p-8 text-3xl underline">La Liga</h1>
 
         <div v-for="(allRss,index) in rss" :key="index" class="flex bg-white flex-col sm:flex-row sm:justify-between sm:items-center">
             <div class="p-4">
