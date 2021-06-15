@@ -37,7 +37,6 @@
                         <small class="mt-5" style="color:red;" v-if="errorPassword">Este campo es obligatorio, debe llenarlo.</small>
                     </div>
     
-                    <!-- <input type="submit" value="Registrarse" class="bg-black text-white font-bold text-lg hover:bg-gray-700 p-2 mt-8" v-on:click="registro()"/> -->
                     <button class="bg-black text-white font-bold uppercase text-sm px-6 p-4 mt-6 rounded shadow hover:bg-gray-700 outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150" type="button" v-on:click="registro()">
                         Registrar
                     </button>
@@ -97,7 +96,6 @@
 
 <script>
 
-    // import { mapActions, mapGetters } from 'vuex';
     import {register} from '../services/login'
     import {verifyEmail} from '../services/login'
 

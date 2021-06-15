@@ -20,7 +20,6 @@
 				</div>
 			</div>
 			<hr>
-		<!-- <div v-if="this.user.validated == true"> -->
 			<div>
 				<div v-if="allTask">
 					<All-task/>

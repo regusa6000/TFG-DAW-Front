@@ -56,11 +56,6 @@ export default {
           }else{
             this.saveUser(response.data)
             console.log(response)
-            // let d = new Date();
-            // d.setTime(d.getTime() + 1 * 24 * 60 * 60 * 1000);
-            // let expires = "expires=" + d.toUTCString();
-            // document.cookie = "Token=" + response.data.token + ";" + expires + ";path=/";
-            /*Esto sirve para redireccionar a otra pagina, name es la ruta a la cual apuntamos*/
             this.$router.push({name:"Calendar"})
           }
         })

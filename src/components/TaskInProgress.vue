@@ -21,14 +21,12 @@
                     <div class="relative z-0 w-full mb-5">
                         <input type="text" v-model="tarea.nameTask" name="name" placeholder=" " required
                         class="pt-3 pb-2  block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"/>
-                        <!-- <label for="name" class="absolute duration-300 top-3 left-4 text-gray-500 text-center">Nombre a Cambiar: {{tarea.name_task}}</label> -->
                         <small class="mt-5" style="color:red;" v-if="errorNameTask">Este campo es obligatorio, debe llenarlo.</small>
                     </div>
 
                     <div class="relative z-0 w-full mb-5">
                         <input type="text" v-model="tarea.description" name="descrpccion" placeholder=" "
                         class="pt-3 pb-2 block w-full px-0 mt-0 bg-transparent border-0 border-b-2 appearance-none focus:outline-none focus:ring-0 focus:border-black border-gray-200"/>
-                        <!-- <label class="absolute duration-300 top-3 left-4 text-gray-500 text-center">Descripción a Cambiar: {{tarea.description}}</label> -->
                         <small class="mt-5" style="color:red;" v-if="errorDescription">Este campo es obligatorio, debe llenarlo.</small>
                     </div>
 
@@ -67,7 +65,6 @@ import {taskInProgress} from '../services/login'
 import {deleteTask} from '../services/login'
 import { Datetime } from 'vue-datetime'
 import {updateTask} from '../services/login'
-// You need a specific loader for CSS files
 import 'vue-datetime/dist/vue-datetime.css'
 
 export default {
