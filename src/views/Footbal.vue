@@ -8,14 +8,14 @@
                 <p>{{allRss.titulo}}</p>
             </div>
             <div class="p-4">
-                <div :id="'suscribirse' + (index+1)">
+                <div :id="'suscribirse' + allRss.id">
                     <button id="button1" type="button"
                         class=" px-7 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none colorBoton hover:bg-gray-700 hover:shadow-lg focus:outline-none" v-on:click="suscribirse(allRss.id)">
                         Suscribirse
                     </button>
                 </div>
                 
-                <div :id="'cancelarSubscripcion' + (index+1)">
+                <div :id="'cancelarSubscripcion' + allRss.id">
                     <button id="button" type="button"
                         class=" px-7 py-3 mt-3 text-lg text-white transition-all duration-150 ease-linear rounded-lg shadow outline-none colorBoton hover:bg-gray-700 hover:shadow-lg focus:outline-none" v-on:click="dejarSuscripcion(allRss.id)">
                         Cancelar Subscripción
@@ -59,12 +59,13 @@
                     this.subscritos = response.data
 
                     for(let a = 0 ; a < this.subscritos.length ; a++){
+                        console.log(this.subscritos[a])
                         if(this.subscritos[a].isSubscribed == false){
-                             $("#suscribirse"+(a+1)).css("display","block");
-                             $("#cancelarSubscripcion"+(a+1)).css("display","none");
+                             $("#suscribirse"+this.subscritos[a].idRss).css("display","block");
+                             $("#cancelarSubscripcion"+this.subscritos[a].idRss).css("display","none");
                         }else{
-                            $("#suscribirse"+(a+1)).css("display","none");
-                            $("#cancelarSubscripcion"+(a+1)).css("display","block");
+                            $("#suscribirse"+this.subscritos[a].idRss).css("display","none");
+                            $("#cancelarSubscripcion"+this.subscritos[a].idRss).css("display","block");
                         }
                     }
                    console.log(this.subscritos)
