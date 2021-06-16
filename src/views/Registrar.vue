@@ -12,28 +12,29 @@
                 
                 <form class="flex flex-col pt-1 md:pt-8" onsubmit="event.preventDefault();">
                     <div class="flex flex-col pt-4">
-                        <input v-model="name" type="text" id="name" placeholder="Nombre" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                        <input v-model="name" type="text" id="name" placeholder="Nombre" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" required/>
                         <small class="mt-5" style="color:red;" v-if="errorName">Este campo es obligatorio, debe llenarlo.</small>
                     </div>
 
                     <div class="flex flex-col pt-4">
-                        <input v-model="apellidos" type="text" id="apellido" placeholder="Apellidos" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                        <input v-model="apellidos" type="text" id="apellido" placeholder="Apellidos" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" required/>
                         <small class="mt-5" style="color:red;" v-if="errorApellidos">Este campo es obligatorio, debe llenarlo.</small>
                     </div>
 
                     <div class="flex flex-col pt-4">
-                        <input v-model="email" type="email" id="email" placeholder="your@email.com" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                        <input  type="email" id="email" placeholder="your@email.com" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" v-model="email" required/>
                         <small class="mt-5" style="color:red;" v-if="errorEmail">Este campo es obligatorio, debe llenarlo.</small>
                         <small class="mt-5" style="color:red;" v-if="verify">Este cuenta ya esta registrado, registrece con otra cuenta.</small>
+                        <small class="mt-5" style="color:red;" v-if="errorA">Este cuenta ya esta registrado, registrece con otra cuenta.</small>
                     </div>
 
                     <div class="flex flex-col pt-4">
-                        <input v-model="telefono" type="number" id="telefono" placeholder="Telefono" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                        <input v-model="telefono" type="number" id="telefono" placeholder="Telefono" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" required/>
                         <small class="mt-5" style="color:red;" v-if="errorTelefono">Este campo es obligatorio, debe llenarlo.</small>
                     </div>
     
                     <div class="flex flex-col pt-4">
-                        <input v-model="password" type="password" id="password" placeholder="Contraseña" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" />
+                        <input v-model="password" type="password" id="password" placeholder="Contraseña" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mt-1 leading-tight focus:outline-none focus:shadow-outline" required/>
                         <small class="mt-5" style="color:red;" v-if="errorPassword">Este campo es obligatorio, debe llenarlo.</small>
                     </div>
     
@@ -98,6 +99,7 @@
 
     import {register} from '../services/login'
     import {verifyEmail} from '../services/login'
+    import {expresionRegular} from '../services/function'
 
 export default {
     name: "regular-modal",
@@ -115,7 +117,8 @@ export default {
             errorEmail:false,
             errorTelefono: false,
             errorPassword: false,
-            verify: false
+            verify: false,
+            errorA:false
     };
   },
   methods: {
@@ -141,16 +144,25 @@ export default {
                             this.errorPassword = true
                         }else{
                             this.errorPassword = false
-                            verifyEmail(this.email).then((response)=>{
-                                if(response.data.email == this.email){
-                                    this.verify = true
-                                    
-                                }else{
-                                    this.verify = false
-                                    this.toggleModal()
-                                }
-                                
-                            })
+                            if(expresionRegular(this.email) != true){
+                                console.log("La dirección de email es incorrecta.");
+                                this.errorA = true
+                            }else{
+                                this.errorA = false
+                                console.log("La dirección de email " + this.email + " es correcta.");
+                                verifyEmail(this.email).then((response)=>{
+                                    if(response.data != null){
+                                        if(response.data.email == this.email){
+                                            this.verify = true
+                                            
+                                        }else{
+                                            this.verify = false
+                                        }
+                                    }
+                                })
+                                setTimeout(this.toggleModal(),6000)
+                            }
+                            
                         }
                     }
                 }
